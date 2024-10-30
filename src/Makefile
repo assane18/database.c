@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
-SOURCES = main.c repl.c btree.c
+SOURCES = main.c repl.c btree.c table.c
 OBJECTS = $(SOURCES:.c=.o)
 TARGET = db
 
