@@ -24,7 +24,7 @@ Table* creer_table(const char* nom, int nb_colonnes, Colonne* colonnes) {
 
     // Vérifier si l'allocation pour les colonnes a réussi
     if (table->colonnes == NULL) {
-        free(table);  // Libérer la mémoire allouée pour la table
+        free(table);  // Libérer la mémoire allouée pour la table si échec
         return NULL;
     }
 
@@ -74,6 +74,7 @@ void afficher_table(Table* table) {
     for (int i = 0; i < table->nb_lignes; i++) {
         void** ligne = (void**)table->lignes[i];  // Récupérer la ligne
 
+        // Afficher les valeurs de chaque colonne dans la ligne
         for (int j = 0; j < table->nb_colonnes; j++) {
             if (table->colonnes[j].type == TYPE_COLONNE_INT) {
                 printf("%d\t", *((int*)ligne[j]));  // Afficher la valeur si c'est un entier

@@ -162,7 +162,10 @@ void repl(Table* table) {
         }
 
         // Libérer la mémoire allouée pour statement->data après utilisation
-        free(statement.data);
+        if (statement.data != NULL) {
+            free(statement.data); // Libère la mémoire de statement->data
+            statement.data = NULL; // Réinitialiser le pointeur pour éviter un double free
+        }
     }
     close_input_buffer(input_buffer);
 }
