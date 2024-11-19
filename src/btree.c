@@ -18,7 +18,7 @@ Node* insert(Node* root, int data, void* line) {
         node->line = line; // Assigner la ligne à ce nœud
         return node;
     }
-    
+
     if (data < root->data) {
         root->left = insert(root->left, data, line);
     } else if (data > root->data) {
@@ -37,6 +37,6 @@ Node* search(Node* root, int data) {
     if (data < root->data) {
         return search(root->left, data);
     }
-    
+
     return search(root->right, data);
 }

@@ -12,13 +12,9 @@ typedef struct Node {
     struct Node* right; // Pointeur vers le sous-arbre droit
 } Node;
 
-// Fonction pour créer un nouveau nœud
+// Prototypes de fonctions pour manipuler l'arbre binaire
 Node* create_node(int data);
-
-// Fonction pour insérer une valeur dans l'arbre
 Node* insert(Node* root, int data, void* line);
-
-// Fonction pour rechercher une valeur dans l'arbre
 Node* search(Node* root, int data);
 
 #endif // BTREE_H

@@ -1,61 +1,48 @@
 #ifndef REPL_H
 #define REPL_H
 
-#include <stdbool.h>  // Pour les types booléens (true/false)
-#include "table.h"    // Inclure le fichier table.h pour manipuler les tables
+#include <stdbool.h>
+#include <sys/types.h> // Ajouté pour ssize_t
+#include "table.h"
 
-// Enumération pour les résultats des commandes métas (comme .exit)
+// Types de retour pour les commandes utilisateurs
 typedef enum {
-  META_COMMAND_SUCCESS,  // La commande a réussi
-  META_COMMAND_UNRECOGNIZED_COMMAND  // La commande n'est pas reconnue
+  META_COMMAND_SUCCESS,
+  META_COMMAND_UNRECOGNIZED_COMMAND
 } MetaCommandResult;
 
-// Enumération pour les résultats lors de la préparation d'une instruction
-typedef enum { 
-  PREPARE_SUCCESS,           // L'instruction a été préparée avec succès
-  PREPARE_UNRECOGNIZED_STATEMENT  // L'instruction est non reconnue
+typedef enum {
+  PREPARE_SUCCESS,
+  PREPARE_UNRECOGNIZED_STATEMENT
 } PrepareResult;
 
-// Enumération pour différents types d'instructions (INSERT ou SELECT)
-typedef enum { 
-  STATEMENT_INSERT,   // Instruction d'insertion
-  STATEMENT_SELECT    // Instruction de sélection
+// Types d'instructions possibles
+typedef enum {
+  STATEMENT_INSERT,
+  STATEMENT_SELECT
 } StatementType;
 
-// Structure représentant une instruction, qui a un type
+// Structure pour une instruction
 typedef struct {
-  StatementType type;  // Type de l'instruction (INSERT ou SELECT)
+  StatementType type;
+  char* data;
 } Statement;
 
-// Structure représentant le tampon d'entrée de l'utilisateur
+// Structure pour le tampon d'entrée
 typedef struct {
-  char* buffer;         // Le tampon contenant l'entrée de l'utilisateur
-  size_t buffer_length; // La longueur actuelle du tampon
-  ssize_t input_length; // La longueur de l'entrée de l'utilisateur (sans le \0)
+  char* buffer;
+  size_t buffer_length;
+  ssize_t input_length; // Utilisation de ssize_t pour la longueur de l'entrée
 } InputBuffer;
 
-// Fonction pour créer un nouveau tampon d'entrée
+// Prototypes de fonctions
 InputBuffer* new_input_buffer();
-
-// Fonction pour afficher l'invite de commande (par exemple "db > ")
 void print_prompt();
-
-// Fonction pour lire l'entrée de l'utilisateur
 void read_input(InputBuffer* input_buffer);
-
-// Fonction pour fermer le tampon d'entrée et libérer la mémoire
 void close_input_buffer(InputBuffer* input_buffer);
-
-// Fonction pour gérer les commandes métas (comme .exit)
-MetaCommandResult do_meta_command(InputBuffer* input_buffer);
-
-// Fonction pour préparer une instruction à exécuter
+MetaCommandResult do_meta_command(InputBuffer* input_buffer, Table* table);
 PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement);
+void execute_statement(Statement* statement, Table* table);
+void repl(Table* table);
 
-// Fonction pour exécuter une instruction préparée
-void execute_statement(Statement* statement);
-
-// Fonction REPL (Read-Eval-Print Loop), qui boucle pour recevoir les commandes de l'utilisateur
-void repl(Table* table); // Modifie cette ligne si tu veux passer une table à repl
-
-#endif // REPL_H
+#endif

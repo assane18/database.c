@@ -1,28 +1,28 @@
-# Définir le compilateur et les options de compilation
+# Utilisation de GCC avec des options pour afficher des avertissements supplémentaires
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g
 
-# Définir les fichiers sources, objets et l'exécutable cible
+# Les fichiers sources et les cibles
 SOURCES = main.c repl.c btree.c table.c
 OBJECTS = $(SOURCES:.c=.o)
 TARGET = db
 
-# Cible par défaut pour construire l'exécutable
+# Cible principale qui construit le programme
 all: $(TARGET)
 
-# Règle pour lier les objets et créer l'exécutable
+# Règle pour lier les fichiers objets et créer l'exécutable
 $(TARGET): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
 
-# Règle générique pour compiler les fichiers source en objets
+# Règle pour compiler les fichiers .c en fichiers .o
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Règle pour nettoyer les fichiers générés
+# Nettoyer les fichiers objets et l'exécutable
 clean:
 	rm -f $(OBJECTS) $(TARGET)
 
-# Règle pour exécuter le programme avec Valgrind
+# Tester le programme avec Valgrind pour détecter les fuites de mémoire
 valgrind: $(TARGET)
 	valgrind --leak-check=full --show-leak-kinds=all ./$(TARGET)
 

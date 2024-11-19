@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> // Nécessaire pour strdup
-#include <sys/types.h>
+#include <sys/types.h> // Ajouté pour ssize_t
 #include "table.h" // Assurez-vous que ce fichier est inclus pour le type Table
 
 typedef enum {
@@ -10,14 +10,14 @@ typedef enum {
     META_COMMAND_UNRECOGNIZED_COMMAND
 } MetaCommandResult;
 
-typedef enum { 
-    PREPARE_SUCCESS, 
-    PREPARE_UNRECOGNIZED_STATEMENT 
+typedef enum {
+    PREPARE_SUCCESS,
+    PREPARE_UNRECOGNIZED_STATEMENT
 } PrepareResult;
 
-typedef enum { 
-    STATEMENT_INSERT, 
-    STATEMENT_SELECT 
+typedef enum {
+    STATEMENT_INSERT,
+    STATEMENT_SELECT
 } StatementType;
 
 typedef struct {
@@ -28,7 +28,7 @@ typedef struct {
 typedef struct {
     char* buffer;
     size_t buffer_length;
-    ssize_t input_length;
+    ssize_t input_length; // Utilisation de ssize_t pour la longueur de l'entrée
 } InputBuffer;
 
 // Fonction pour créer un nouveau tampon d'entrée
@@ -70,10 +70,16 @@ void close_input_buffer(InputBuffer* input_buffer) {
 }
 
 // Fonction pour traiter les commandes métas
-MetaCommandResult do_meta_command(InputBuffer* input_buffer) {
+MetaCommandResult do_meta_command(InputBuffer* input_buffer, Table* table) {
     if (strcmp(input_buffer->buffer, ".exit") == 0) {
         close_input_buffer(input_buffer);
         exit(EXIT_SUCCESS);
+    } else if (strcmp(input_buffer->buffer, ".save") == 0) {
+        sauvegarder(table, "donnees.txt");
+        return META_COMMAND_SUCCESS;
+    } else if (strcmp(input_buffer->buffer, ".load") == 0) {
+        charger(table, "donnees.txt");
+        return META_COMMAND_SUCCESS;
     } else {
         return META_COMMAND_UNRECOGNIZED_COMMAND;
     }
@@ -84,7 +90,6 @@ PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement)
     if (strncmp(input_buffer->buffer, "insert", 6) == 0) {
         statement->type = STATEMENT_INSERT;
         // Stocker les données après "insert "
-        // Utilisation de malloc et strcpy au lieu de strdup
         size_t len = strlen(input_buffer->buffer + 7);
         statement->data = malloc(len + 1); // +1 pour le caractère nul
         strcpy(statement->data, input_buffer->buffer + 7); // Copie les données
@@ -121,14 +126,16 @@ void execute_statement(Statement* statement, Table* table) {
 
             ligne[3] = malloc(sizeof(int)); // Allouer de la mémoire pour l'âge
             *((int*)ligne[3]) = age; // Assigner l'âge
-            
+
             ajouter_ligne(table, ligne); // Ajouter la ligne à la table
+            insert_arbre(table, id, ligne); // Insérer dans l'arbre binaire
             printf("Insertion réussie : %d %s %s %d\n", id, nom, prenom, age);
             break;
         }
-        case (STATEMENT_SELECT):
+        case (STATEMENT_SELECT): {
             afficher_table(table); // Afficher la table
             break;
+        }
     }
 }
 
@@ -138,9 +145,9 @@ void repl(Table* table) {
     while (true) {
         print_prompt();
         read_input(input_buffer);
-        
+
         if (input_buffer->buffer[0] == '.') {
-            switch (do_meta_command(input_buffer)) {
+            switch (do_meta_command(input_buffer, table)) {
                 case META_COMMAND_SUCCESS:
                     continue; // Continue si la commande a réussi
                 case META_COMMAND_UNRECOGNIZED_COMMAND:
@@ -151,7 +158,7 @@ void repl(Table* table) {
 
         Statement statement;
         PrepareResult prepare_result = prepare_statement(input_buffer, &statement);
-        
+
         switch (prepare_result) {
             case PREPARE_SUCCESS:
                 execute_statement(&statement, table); // Utilise le paramètre table ici
