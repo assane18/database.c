@@ -63,44 +63,44 @@ A simple skeleton code in C for a database
 
 						Exemple :
 						---------
-assane@debian:~/cc1/database.c/src$ make
-`gcc -Wall -Wextra -std=c11 -g -c main.c -o main.o`
-`gcc -Wall -Wextra -std=c11 -g -c repl.c -o repl.o`
-`gcc -Wall -Wextra -std=c11 -g -c btree.c -o btree.o`
-`gcc -Wall -Wextra -std=c11 -g -c table.c -o table.o`
-`gcc -Wall -Wextra -std=c11 -g -o db main.o repl.o btree.o table.o`
-assane@debian:~/cc1/database.c/src$ ./db
-`Bienvenue dans le gestionnaire de base de données !
-db > insert 1 Assane Traore 22
-`Insertion réussie : 1 Assane Traore 22`
-db > insert 2 Traore Assane 23
-`Insertion réussie : 2 Traore Assane 23`
-db > select
-`ID      Nom     Prenom  Age`
-`1       Assane  Traore   22`
-`2       Traore  Assane   23`
-db > .save
-`Données sauvegardées dans donnees.txt`
-db > .exit
-assane@debian:~/cc1/database.c/src$ ./db
-db > select
-`ID	Nom	Prenom	Age	`
-`double free or corruption (out)``
-`Abandon`
-assane@debian:~/cc1/database.c/src$ ./db
-db >.load
-db > select
-`ID      Nom     Prenom  Age`
-`1       Assane  Traore   22`
-`2       Traore  Assane   23`
-db >.exit
-assane@debian:~/cc1/database.c/src$ ls
-`btree.c  btree.o  donnees.txt  main.o    repl.c  repl.o   table.h`
-`btree.h  db       main.c       Makefile  repl.h  table.c  table.o`
-assane@debian:~/cc1/database.c/src$ make clean
-`rm -f main.o repl.o btree.o table.o db`
-assane@debian:~/cc1/database.c/src$ ls
-`btree.c  btree.h  donnees.txt  main.c  Makefile  repl.c  repl.h` 
-`table.c  table.h`
-assane@debian:~/cc1/database.c/src$
+       		  assane@debian:~/cc1/database.c/src$ make
+		  `gcc -Wall -Wextra -std=c11 -g -c main.c -o main.o`
+		  `gcc -Wall -Wextra -std=c11 -g -c repl.c -o repl.o`
+		  `gcc -Wall -Wextra -std=c11 -g -c btree.c -o btree.o`
+		  `gcc -Wall -Wextra -std=c11 -g -c table.c -o table.o`
+		  `gcc -Wall -Wextra -std=c11 -g -o db main.o repl.o btree.o table.o`
+ 		  assane@debian:~/cc1/database.c/src$ ./db
+ 		  `Bienvenue dans le gestionnaire de base de données !
+ 		  db > insert 1 Assane Traore 22
+		  `Insertion réussie : 1 Assane Traore 22`
+  		  db > insert 2 Traore Assane 23
+		  `Insertion réussie : 2 Traore Assane 23`
+ 		  db > select
+		  `ID      Nom     Prenom  Age`
+		  `1       Assane  Traore   22`
+		  `2       Traore  Assane   23`
+ 		  db > .save
+  		  `Données sauvegardées dans donnees.txt`
+ 		  db > .exit
+  		  assane@debian:~/cc1/database.c/src$ ./db
+  		  db > select
+		  `ID	Nom	Prenom	Age	`
+		  `double free or corruption (out)``
+		  `Abandon`
+  		  assane@debian:~/cc1/database.c/src$ ./db
+  		  db >.load
+  		  db > select
+		  `ID      Nom     Prenom  Age`
+		  `1       Assane  Traore   22`
+		  `2       Traore  Assane   23`
+  		  db >.exit
+		  assane@debian:~/cc1/database.c/src$ ls
+		  `btree.c  btree.o  donnees.txt  main.o    repl.c  repl.o   table.h`
+		  `btree.h  db       main.c       Makefile  repl.h  table.c  table.o`
+  		  assane@debian:~/cc1/database.c/src$ make clean
+		  `rm -f main.o repl.o btree.o table.o db`
+  		  assane@debian:~/cc1/database.c/src$ ls
+		  `btree.c  btree.h  donnees.txt  main.c  Makefile  repl.c  repl.h` 
+  		  `table.c  table.h`
+  		  assane@debian:~/cc1/database.c/src$
 
